@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Isobar — Weather Instrument</title>
+<meta name="description" content="A small, premium weather dashboard built on the WeatherAI API." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="grain"></div>
+
+<div class="frame">
+
+  <!-- ============ HEADER ============ -->
+  <header class="bar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 32 32" fill="none">
+        <circle cx="16" cy="16" r="13" stroke="currentColor" stroke-width="1.4"/>
+        <circle cx="16" cy="16" r="8.2" stroke="currentColor" stroke-width="1.1" opacity="0.6"/>
+        <circle cx="16" cy="16" r="3.4" stroke="currentColor" stroke-width="1.1" opacity="0.35"/>
+        <circle cx="16" cy="16" r="1.4" fill="currentColor"/>
+      </svg>
+      <div class="brand-text">
+        <span class="brand-name">ISOBAR</span>
+        <span class="brand-sub">weather instrument</span>
+      </div>
+    </div>
+
+    <form class="search" id="searchForm" autocomplete="off">
+      <svg viewBox="0 0 24 24" class="search-icon" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6"/><path d="M20 20L16.65 16.65" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <input id="searchInput" type="text" placeholder="Search a city…" aria-label="Search a city" />
+      <div id="searchResults" class="search-results" hidden></div>
+    </form>
+
+    <button id="locateBtn" class="icon-btn" title="Use my location" aria-label="Use my location">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 2v3M12 19v3M2 12h3M19 12h3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="12" r="6" stroke="currentColor" stroke-width="1.6"/></svg>
+    </button>
+  </header>
+
+  <!-- ============ HERO READING ============ -->
+  <main>
+    <section class="hero" id="hero">
+      <svg class="isobar-bg" id="isobarBg" viewBox="0 0 1000 500" preserveAspectRatio="none" aria-hidden="true">
+        <!-- contour paths injected/animated via CSS -->
+        <path class="contour c1" d="M-50,250 C150,150 350,350 550,250 C750,150 950,350 1050,250" />
+        <path class="contour c2" d="M-50,280 C150,190 350,380 550,280 C750,190 950,380 1050,280" />
+        <path class="contour c3" d="M-50,220 C150,110 350,320 550,220 C750,110 950,320 1050,220" />
+        <path class="contour c4" d="M-50,310 C150,230 350,410 550,310 C750,230 950,410 1050,310" />
+      </svg>
+
+      <div class="hero-top">
+        <div class="place">
+          <span id="placeName">Locating…</span>
+          <span class="dot">·</span>
+          <span id="placeTime" class="mono">--:--</span>
+        </div>
+        <div class="asof mono" id="asOf"></div>
+      </div>
+
+      <div class="reading">
+        <div class="temp-block">
+          <span class="temp" id="temp">–</span>
+          <button class="unit-toggle" id="unitToggle" type="button" aria-label="Toggle units">
+            <span class="u active" data-u="metric">°C</span><span class="sep">/</span><span class="u" data-u="imperial">°F</span>
+          </button>
+        </div>
+        <div class="condition-block">
+          <div class="condition" id="condition">—</div>
+          <div class="range" id="range">H — · L —</div>
+        </div>
+      </div>
+
+      <p class="ai-summary" id="aiSummary"></p>
+
+      <div class="chips" id="chips"></div>
+    </section>
+
+    <!-- ============ HOURLY TAPE ============ -->
+    <section class="panel" id="hourlyPanel" hidden>
+      <div class="panel-head">
+        <h2>Next hours</h2>
+      </div>
+      <div class="tape" id="hourlyTape"></div>
+    </section>
+
+    <!-- ============ DAILY LOG ============ -->
+    <section class="panel" id="dailyPanel" hidden>
+      <div class="panel-head">
+        <h2>Seven-day log</h2>
+        <span class="panel-note mono">low → high, °</span>
+      </div>
+      <div class="log" id="dailyLog"></div>
+    </section>
+
+    <!-- ============ ERROR STATE ============ -->
+    <div class="fault" id="fault" hidden>
+      <div class="fault-head">⚠ SIGNAL LOST</div>
+      <p id="faultMsg"></p>
+      <button id="retryBtn" class="retry">Retry reading</button>
+    </div>
+  </main>
+
+  <!-- ============ FOOTER / QUOTA ============ -->
+  <footer class="foot">
+    <div class="quota" id="quota">
+      <div class="quota-label mono">quota</div>
+      <div class="quota-bar"><div class="quota-fill" id="quotaFill"></div></div>
+      <div class="quota-num mono" id="quotaNum">—</div>
+    </div>
+    <button class="raw-toggle mono" id="rawToggle">view raw response</button>
+  </footer>
+
+  <pre class="raw-panel mono" id="rawPanel" hidden></pre>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
